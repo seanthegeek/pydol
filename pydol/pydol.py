@@ -14,7 +14,7 @@ import xmltodict
 __author__ = "Sean Whalen"
 __copyright__ = "Copyright (C) 2012 %s" % __author__
 __license__ = "MIT"
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 
 class DOLAPI(object):
@@ -115,7 +115,7 @@ class DOLAPI(object):
         path += "?%s" % urlencode(url_params)
 
         if auth:
-            if self._api_key == None or self._shared_secret == None:
+            if self._api_key is None or self._shared_secret is None:
                 raise ValueError("API credentials are required.")
             # Add the authorization header
             http_headers['Authorization'] = self._create_auth_header(path)
@@ -150,11 +150,11 @@ class DOLAPI(object):
 
         # Heed generic HTTP errors
         if response.status_code == 400:
-            raise self._DOLAPIError("The query contains an error")
+            raise self._DOLAPIError("400 - The query contains an error")
         elif response.status_code == 401:
-            raise self._DOLAPIError("Credentials were missing or are invalid")
+            raise self._DOLAPIError("401 - Credentials are missing or invalid")
         elif response.status_code == 404:
-            raise self._DOLAPIError("Dataset name or table name invalid")
+            raise self._DOLAPIError("404 - Dataset name or table name invalid")
 
         return data
 

@@ -20,13 +20,15 @@ data.
     # Get table data as a list of dictionaries
     UNEMPLOYMENT = DOL.table("statistics/BLS_Numbers", "unemploymentRate")
     
-    # detailed examples at docs/examples.txt
+    # Detailed examples at docs/examples.rst
 
 It is well documented, easy-to-use, `PEP 8`_ compliant, and unit tested. 
 
 
 Dependencies
 ============
+
+* Python_ >= 2.6 < 3.0 
 
 * requests_
 
@@ -42,7 +44,7 @@ Valid API credentials are required to request data from tables. To obtain creden
 2) `Create a new token/key`_
     You must provide:
 
-    * A shared secret - I suggest using a subset of `"random" printable ASCII characters`_
+    * A shared secret - I suggest using a subset of `"random" alpha-numeric characters`_
     * An application name
     * An application description
     
@@ -56,9 +58,10 @@ This project is not affiliated with or endorsed by the `U.S. Department of Labor
  
 .. _U.S. Department of Labor API: http://developer.dol.gov/
 .. _PEP 8: http://www.python.org/dev/peps/pep-0008/
+.. _Python: http://www.python.org/download/
 .. _requests: http://docs.python-requests.org/en/latest/index.html
 .. _xmltodict: https://github.com/martinblech/xmltodict
 .. _Create a DOL developer account: https://devtools.dol.gov/developer/Account/Register
 .. _Create a new token/key: https://devtools.dol.gov/developer/Tokens/Create
-.. _"random" printable ASCII characters: https://www.grc.com/passwords.htm
+.. _"random" alpha-numeric characters: https://www.grc.com/passwords.htm
 .. _U.S. Department of Labor: http://www.dol.gov
