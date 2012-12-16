@@ -14,7 +14,7 @@ __license__ = "MIT"
 
 
 setup(name="pydol",
-      version="1.0.1",
+      version="1.0.2",
       description="A pythonic interface to the U.S. Department of Labor API",
       license=open('LICENSE.txt').read(),
       author="Sean Whalen",
