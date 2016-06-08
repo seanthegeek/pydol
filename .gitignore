@@ -39,3 +39,6 @@ nosetests.xml
 
 # API keys used for testing
 pydol/test/keys
+
+# PyCharm project
+.idea

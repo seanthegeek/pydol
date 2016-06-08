@@ -1,6 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""pydol - A pythonic interface to the U.S. Department of Labor API"""
+"""pydol - A pythonic interface to the U.S. Department of Labor API
+
+Copyright 2016 Sean Whalen
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+"""
 
 from hashlib import sha1
 from hmac import new as sign
@@ -12,9 +27,9 @@ import xmltodict
 
 
 __author__ = "Sean Whalen"
-__copyright__ = "Copyright (C) 2012 %s" % __author__
-__license__ = "MIT"
-__version__ = "1.0.1"
+__copyright__ = "Copyright (C) 2016 %s" % __author__
+__license__ = "Apache 2.0"
+__version__ = "1.0.3"
 
 
 class DOLAPI(object):
@@ -134,7 +149,7 @@ class DOLAPI(object):
 
         # Ensure the correct parser is used. Process API errors.
         if  response.headers['Content-Type'].startswith('application/json'):
-            data = response.json
+            data = response.json()
             if "error" in data:
                 error = data['error']['message']['value']
                 raise self._DOLAPIError(error)

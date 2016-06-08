@@ -28,7 +28,7 @@ It is well documented, easy-to-use, `PEP 8`_ compliant, and unit tested.
 Dependencies
 ============
 
-* Python_ >= 2.6 < 3.0 
+* Python_ >= 2.6
 
 * requests_
 

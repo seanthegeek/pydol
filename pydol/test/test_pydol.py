@@ -1,7 +1,22 @@
 #!/usr/bn/env python
 # -*- coding: utf-8 -*-
 
-"""Unit tests for pydol"""
+"""Unit tests for pydol
+
+Copyright 2016 Sean Whalen
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+"""
 
 import unittest
 import json
@@ -10,8 +25,8 @@ from pydol import DOLAPI
 
 
 __author__ = "Sean Whalen"
-__copyright__ = "Copyright (C) 2012 %s" % __author__
-__license__ = "MIT"
+__copyright__ = "Copyright (C) 2016 %s" % __author__
+__license__ = "Apache 2.0"
 
 
 class Test(unittest.TestCase):
