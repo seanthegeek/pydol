@@ -20,14 +20,13 @@ limitations under the License.
 from hashlib import sha1
 from hmac import new as sign
 from time import strftime, gmtime
-from urllib import urlencode
 
 from requests import get
 import xmltodict
 
 
 __author__ = "Sean Whalen"
-__copyright__ = "Copyright (C) 2016 %s" % __author__
+__copyright__ = "Copyright 2016 %s" % __author__
 __license__ = "Apache 2.0"
 __version__ = "1.0.3"
 
@@ -43,7 +42,6 @@ class DOLAPI(object):
         API credentials are needed for most queries.
         Credentials can be obtained at:
         https://devtools.dol.gov/developer
-
         @param api_key: Your DOL-generated API key/token
         @param shared_secret: The secret string to provided to the DOL
         """
@@ -54,35 +52,23 @@ class DOLAPI(object):
 
     def _create_auth_header(self, path):
         """Generates the authorization header
-
         @param path: The URL path requested
-
         An "authorization string" consists of three parts:
-
         - The requested URL path, beginning after the top level domain,
         including any parameters. Must match the actual request URL.
         - An ISO 8601 compliant timestamp (in GMT)
         - Your API key
-
         These values are arranged like HTTP GET parameters:
-
         {0}&Timestamp={1}&ApiKey={1}
-
         where {0}, {1}, and {2} are the values for path, Timestamp and
         API Key respectively.
-
         These values should NOT be URL escaped, with the exception of the URL.
-
         A HMAC-SHA1 signature is generated using the shared secret as the key,
         and the authentication string as the message.
-
         The authorization header format is:
-
         Timestamp={0}&ApiKey={1}&Signature={2}
-
         where {0}, {1}, and {2} are the values for Timestamp, API Key, and
         Signature respectively.
-
         Note that the authorization string and the authorization header are
         different.
         """
@@ -91,43 +77,41 @@ class DOLAPI(object):
         timestamp = strftime("%Y-%m-%dT%H:%M:%SZ", gmtime())
 
         # Construct the authentication string
-        auth_string = "%s&Timestamp=%s&ApiKey=%s" % (path,
-                                                     timestamp,
-                                                     self._api_key)
+        auth_string = "{0}&Timestamp={1}&ApiKey={2}".format(path,
+                                                            timestamp,
+                                                            self._api_key)
 
         # Generate the MAC-SHA1 signature
-        signature = sign(key=self._shared_secret,
-                             msg=auth_string,
-                             digestmod=sha1).hexdigest()
+        signature = sign(bytes(self._shared_secret.encode()),
+                         msg=bytes(auth_string.encode()),
+                         digestmod=sha1).hexdigest()
 
         # Construct the authentication header
-        auth_header = "Timestamp=%s&ApiKey=%s&Signature=%s" % (timestamp,
-                                                               self._api_key,
-                                                               signature)
+        auth_header = "Timestamp={0}&ApiKey={1}&Signature={2}".format(timestamp,
+                                                                      self._api_key,
+                                                                      signature)
 
         return auth_header
 
-    def _request(self, path, url_params="", auth=True, accept_format="json"):
+    def _request(self, path, url_params=None, auth=True, accept_format="json"):
         """Provides a consistent method for fetching data from the API
-
         @param path: The path to request, starting after the API version
         @param url_params: An optional dictionary of parameters
         @param auth: Specifies whether to provide an Authorization Header
         @param accept_format: The format to request: 'json' or 'xml'.
-
         @return: A dictionary containing the requested data
         """
         # pylint complains when Requests is used
         # pylint: disable=E1103
 
+        if url_params is None:
+            url_params = {}
+
         # Be professional. Provide a User-Agent header.
-        http_headers = {'User-Agent': 'pydol/%s' % __version__}
+        http_headers = {'User-Agent': 'pydol/{0}'.format(__version__)}
 
         # Add the API version to the URL
-        path = "/V%s/%s" % (self._api_version, path)
-
-        # Add the HTTP GET parameters to the URL
-        path += "?%s" % urlencode(url_params)
+        path = "/V{0}/{1}".format(self._api_version, path)
 
         if auth:
             if self._api_key is None or self._shared_secret is None:
@@ -142,13 +126,13 @@ class DOLAPI(object):
             raise ValueError("Acceptable formats are 'json' or 'xml'")
 
         # Build the full URL to request
-        url = "%s%s" % (self._base_url, path)
+        url = "{0}{1}".format(self._base_url, path)
 
         # Make the HTTP GET request
-        response = get(url, headers=http_headers)
+        response = get(url, headers=http_headers, params=url_params)
 
         # Ensure the correct parser is used. Process API errors.
-        if  response.headers['Content-Type'].startswith('application/json'):
+        if response.headers['Content-Type'].startswith('application/json'):
             data = response.json()
             if "error" in data:
                 error = data['error']['message']['value']
@@ -162,14 +146,16 @@ class DOLAPI(object):
             if "error" in data:
                 error = data['error']['message']['#text']
                 raise self._DOLAPIError(error)
-
-        # Heed generic HTTP errors
-        if response.status_code == 400:
-            raise self._DOLAPIError("400 - The query contains an error")
-        elif response.status_code == 401:
-            raise self._DOLAPIError("401 - Credentials are missing or invalid")
-        elif response.status_code == 404:
-            raise self._DOLAPIError("404 - Dataset name or table name invalid")
+        else:
+            # Heed generic HTTP errors
+            if response.status_code == 400:
+                raise self._DOLAPIError("400 - The query contains an error")
+            elif response.status_code == 401:
+                raise self._DOLAPIError("401 - Credentials are missing or invalid")
+            elif response.status_code == 404:
+                raise self._DOLAPIError("404 - Dataset name or table name invalid")
+            else:
+                raise self._DOLAPIError("Server returned unexpected content")
 
         return data
 
@@ -192,7 +178,6 @@ class DOLAPI(object):
               order_by="",
               filters=""):
         """Returns data from the specified table as a list of dictionaries
-
         @param dataset: The dataset in which the desired table resides
         @param table: The table to query
         @param top: The maximum number of records to return. Optional.
@@ -200,15 +185,11 @@ class DOLAPI(object):
         @param fields: Return only the fields specified in a list. Optional.
         @param order_by: The field to sort the data by. Optional.
         @param filters: A conditional string to sort the data by. Optional.
-
         @attention: API credentials are required
         @attention: No more than 100 records will ever be returned at once
-
         @note: If a database has a multipart name, seperate it with a /
         @note: The records can be paginated by using top and skip
-
         @note: Each dictionary in the list is an entry from the table
-        @note: Each dictionary contains a key for __metadata and for each field
         """
 
         # Tell pylint to ignore the large number of arguments
@@ -222,10 +203,13 @@ class DOLAPI(object):
                     "$filter": filters
                     }
 
-        path = "%s/%s" % (dataset, table)
+        path = "{0}/{1}".format(dataset, table)
 
-        return self._request(path, url_params=url_params)
+        table = self._request(path, url_params=url_params)
+        for row in table:
+            del row['__metadata']
 
+        return table
 
 if __name__ == '__main__':
-    print __doc__
+    print(__doc__)

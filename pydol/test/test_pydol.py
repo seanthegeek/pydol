@@ -46,9 +46,9 @@ class Test(unittest.TestCase):
         keys_file.close()
 
         # Set standard values for testing
-        self.dataset = "FORMS"
-        self.table = "Agencies"
-        self.table2 = "AgencyForms"
+        self.dataset = "statistics/BLS_Numbers"
+        self.table = "averageHourlyEarnings12MonthChange"
+        self.table2 = "consumerPriceIndex12MonthChange"
         self.badstr = "blah"
 
         # Create authenticated and unauthenticated instances of DOLAPI
@@ -60,13 +60,6 @@ class Test(unittest.TestCase):
         """Dataset metadata is accessible with and without API keys"""
         self.assertGreater(len(self.unauth.metadata(self.dataset)), 0)
         self.assertGreater(len(self.auth.metadata(self.dataset)), 0)
-
-    def testMultipartName(self):
-        """Multipart dataset names"""
-        dataset = "statistics/BLS_Numbers"
-        table = "unemploymentRate"
-        self.assertGreater(len(self.auth.metadata(dataset)), 0)
-        self.assertGreater(len(self.auth.table(dataset, table)), 0)
 
     def testMissingKeys(self):
         """Requesting table data without API credentials raises ValueError"""
@@ -120,46 +113,47 @@ class Test(unittest.TestCase):
     def testSkip(self):
         """Record skipping"""
         skip = 1
-        column = "AgencyID"
+        column = "year"
         skiped = self.auth.table(self.dataset, self.table, skip=skip, top=skip)
         unskiped = self.auth.table(self.dataset, self.table, top=skip)
         self.assertNotEqual(skiped[0][column], unskiped[0][column])
 
     def testFields(self):
         """API returns specific fields when requested"""
-        requested_fields = ["FormNumber", "Title"]
+        requested_fields = ["year", "value"]
         table = self.auth.table(self.dataset,
                                 self.table2,
                                 fields=requested_fields)
         table_columns = table[0].keys()
         for x in requested_fields:
             self.assertTrue(x in table_columns)
-        # Account for the extra '__mmetadata' key
-        self.assertEqual(len(requested_fields) + 1, len(table_columns))
+
+        self.assertEqual(len(requested_fields), len(table_columns))
 
     def testOrderBy(self):
         """Request with order_by"""
-        order_by = "FormNumber"
+        order_by = "year"
         table = self.auth.table(self.dataset,
                                 self.table2,
                                 order_by=order_by,
-                                top=2)
-        self.assertLess(table[0][order_by], table[1][order_by])
-        order_by2 = "FormNumber desc"
+                                top=24)
+
+        self.assertLess(table[0][order_by], table[23][order_by])
+        order_by2 = "year desc"
         table = self.auth.table(self.dataset,
                                 self.table2,
                                 order_by=order_by2,
-                                top=2)
-        self.assertGreater(table[0][order_by], table[1][order_by])
+                                top=24)
+        self.assertGreater(table[0][order_by], table[23][order_by])
 
     def testFilters(self):
         """Filtered requests"""
-        filters = "AgencyID eq 'MSHA'"
+        filters = "type eq 'F'"
         table = self.auth.table(self.dataset, self.table2, filters=filters)
         self.assertGreater(len(table), 0)
-        filters = "(AgencyID eq 'MSHA') and (Title eq 'Legal Identity Report')"
+        filters = "(type eq 'F') and (year eq 2013)"
         table = self.auth.table(self.dataset, self.table2, filters=filters)
-        self.assertEqual(len(table), 1)
+        self.assertEqual(len(table), 12)
 
 if __name__ == "__main__":
     SUITE = unittest.TestLoader().loadTestsFromTestCase(Test)

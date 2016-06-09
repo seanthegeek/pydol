@@ -61,8 +61,6 @@ required arguments.
 The table is returned as a list_ of dictionaries, where each dictionary
 represents a table record, and each dictionary key represents a field. 
 
-*Note*: Each dictionary has an additional  entry called ``__metadatadata``
-that contains metadata about the respective table record.
  
 By default, the ``table`` method will return all fields for the first 100
 records in the table. This behaver can be modified by specifying optional
@@ -94,11 +92,11 @@ records in the table. This behaver can be modified by specifying optional
     1) A field name
     2) A comparison keyword:
 
-        * eq – Equal to
-        * ne – Not Equal to
-        * gt – Greater than
-        * lt – Less than
-        * ge – Greater than or equal to
+        * eq  Equal to
+        * ne  Not Equal to
+        * gt  Greater than
+        * lt  Less than
+        * ge  Greater than or equal to
         
     3) A value surrounded by ``'``
  

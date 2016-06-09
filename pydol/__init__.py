@@ -1,4 +1,7 @@
-"""The pydol package"""
+"""The pydol package
+
+
+"""
 
 # pylint: disable=W0403
 
@@ -7,8 +10,10 @@
 # Import the class into the package namespace
 # This removes the requirement of using pydol.pydol
 
-from pydol import DOLAPI
+from __future__ import print_function, absolute_import
+
+from pydol.pydol import DOLAPI
 
 __author__ = "Sean Whalen"
-__copyright__ = "Copyright (C) 2012 %s" % __author__
-__license__ = "MIT"
+__copyright__ = "Copyright (C) 2016 %s" % __author__
+__license__ = "Apache 2.0"

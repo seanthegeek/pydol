@@ -26,6 +26,14 @@ See the License for the specific language governing permissions and
 limitations under the License."""
 
 
+def get_requirements():
+    with open("requirements.txt") as requirements_file:
+        return map(lambda line: line.trim(), requirements_file.read().split('\n'))
+
+def get_readme():
+    with open("README.rst") as readme_file:
+        return readme_file.read()
+
 setup(name="pydol",
       version="1.0.3",
       description="A pythonic interface to the U.S. Department of Labor API",
@@ -34,8 +42,8 @@ setup(name="pydol",
       url='https://github.com/seanthegeek/pydol',
       author_email="whalenster@gmail.com",
       packages=['pydol', 'pydol.test'],
-      long_description=open('README.rst').read(),
-      install_requires=["requests", "xmltodict"],
+      long_description=get_readme(),
+      install_requires=get_requirements(),
       classifiers=[
           'Intended Audience :: Developers',
           'Intended Audience :: Education',
