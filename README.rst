@@ -44,8 +44,8 @@ Valid API credentials are required to request data from tables. To obtain creden
 2) `Create a new token/key`_
     You must provide:
 
-    * A random shared secret
-::
+    * A random shared secret::
+
         >>> import os
         >>> os.urandom(24)
         '\xfd{H\xe5<\x95\xf9\xe3\x96.5\xd1\x01O<!\xd5\xa2\xa0\x9fR"\xa1\xa8'
@@ -55,7 +55,7 @@ Valid API credentials are required to request data from tables. To obtain creden
     
 4) The token/key will be generated after the submission of the form
     
-*Note*: The words token and key are used interchangeably
+**Note**: The words token and key are used interchangeably
     
 
 This project is not affiliated with or endorsed by the `U.S. Department of Labor`_.
