@@ -10,7 +10,7 @@
 # Import the class into the package namespace
 # This removes the requirement of using pydol.pydol
 
-from __future__ import print_function, absolute_import
+from __future__ import print_function, absolute_import, unicode_literals
 
 from pydol.pydol import DOLAPI
 

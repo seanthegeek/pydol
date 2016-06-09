@@ -47,8 +47,9 @@ Valid API credentials are required to request data from tables. To obtain creden
     * A random shared secret::
 
         >>> import os
-        >>> os.urandom(24)
-        '\xfd{H\xe5<\x95\xf9\xe3\x96.5\xd1\x01O<!\xd5\xa2\xa0\x9fR"\xa1\xa8'
+        >>> import binascii
+        >>> binascii.hexlify(os.urandom(32))
+        'daae7948824525c1b8b59f9d5a75e9c0404e46259c7b1e17a4654a7e73c91b87'
 
     * An application name
     * An application description
