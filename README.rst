@@ -44,7 +44,11 @@ Valid API credentials are required to request data from tables. To obtain creden
 2) `Create a new token/key`_
     You must provide:
 
-    * A shared secret - I suggest using a subset of `"random" alpha-numeric characters`_
+    * A shared secret
+    ::
+        >>> import os
+        >>> os.urandom(24)
+        '\xfd{H\xe5<\x95\xf9\xe3\x96.5\xd1\x01O<!\xd5\xa2\xa0\x9fR"\xa1\xa8'
     * An application name
     * An application description
     
