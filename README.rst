@@ -68,5 +68,4 @@ This project is not affiliated with or endorsed by the `U.S. Department of Labor
 .. _xmltodict: https://github.com/martinblech/xmltodict
 .. _Create a DOL developer account: https://devtools.dol.gov/developer/Account/Register
 .. _Create a new token/key: https://devtools.dol.gov/developer/Tokens/Create
-.. _"random" alpha-numeric characters: https://www.grc.com/passwords.htm
 .. _U.S. Department of Labor: http://www.dol.gov
