@@ -18,6 +18,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from os import environ
 import unittest
 import json
 
@@ -40,11 +41,6 @@ class Test(unittest.TestCase):
 
     def setUp(self):
         """Creates instances for testing"""
-        # Get API keys from file
-        keys_file = open("keys", "r")
-        keys = json.loads(keys_file.read())
-        keys_file.close()
-
         # Set standard values for testing
         self.dataset = "statistics/BLS_Numbers"
         self.table = "averageHourlyEarnings12MonthChange"
@@ -54,7 +50,7 @@ class Test(unittest.TestCase):
         # Create authenticated and unauthenticated instances of DOLAPI
         self.unauth = DOLAPI()
         self.badauth = DOLAPI(self.badstr, self.badstr * 2)
-        self.auth = DOLAPI(str(keys['key']), str(keys['secret']))
+        self.auth = DOLAPI(str(environ['DOL_KEY']), str(environ['DOL_SECRET']))
 
     def testMetadata(self):
         """Dataset metadata is accessible with and without API keys"""

@@ -2,6 +2,8 @@
 pydol
 ===========
 
+|Build Status|
+
 pydol provides a pythonic interface to the `U.S. Department of Labor API`_.
 It can be used to fetch official unemployment numbers and other interesting 
 data.
@@ -70,3 +72,8 @@ This project is not affiliated with or endorsed by the `U.S. Department of Labor
 .. _Create a DOL developer account: https://devtools.dol.gov/developer/Account/Register
 .. _Create a new token/key: https://devtools.dol.gov/developer/Tokens/Create
 .. _U.S. Department of Labor: http://www.dol.gov
+
+.. |Build Status| image:: https://travis-ci.org/seanthegeek/pydol.svg?branch=master
+   :target: https://travis-ci.org/seanthegeek/pydol
+
+
