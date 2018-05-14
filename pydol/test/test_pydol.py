@@ -20,7 +20,6 @@ limitations under the License.
 
 from os import environ
 import unittest
-import json
 
 from pydol import DOLAPI
 
@@ -151,6 +150,6 @@ class Test(unittest.TestCase):
         table = self.auth.table(self.dataset, self.table2, filters=filters)
         self.assertEqual(len(table), 12)
 
+
 if __name__ == "__main__":
-    SUITE = unittest.TestLoader().loadTestsFromTestCase(Test)
-    unittest.TextTestRunner(verbosity=2).run(SUITE)
+    unittest.main(verbosity=2)
